@@ -14,11 +14,7 @@ var action = argv[2];
 var songOrMovie = "";
 
 for (var i = 3; i < argv.length; i++) {
-  if (i > 2 && i < argv.length) {
     songOrMovie = songOrMovie + "+" + argv[i];
-  } else {
-    songOrMovie = argv[i];
-  }
 }
 
 switch (action) {
@@ -39,21 +35,39 @@ switch (action) {
 // function definitions
 
 function showSong() {
-  spotify.search({
-    type: 'track',
-    query: songOrMovie
-  }, function(err, data) {
-    if (err) {
-      return console.log('Error occurred: ' + err);
+  if (argv.length > 3) {
+    spotify.search({
+      type: 'track',
+      query: songOrMovie
+    }, function(err, data) {
+      if (err) {
+      return console.log("Error occurred: " + err);
     }
-    // console.log(JSON.stringify(data, null, 2));
-    console.log("===========================")
-    console.log("Artist: " + data.tracks.items[0].artists[0].name);
-    console.log("The song name: " + data.tracks.items[0].name);
-    console.log("Preview link from Spotify: " + data.tracks.items[0].artists[0].external_urls.spotify);
-    console.log("The album that the song is from: " + data.tracks.items[0].album.name);
-    console.log("===========================")
-  });
+      // console.log(JSON.stringify(data, null, 2));
+      console.log("===========================")
+      console.log("Artist: " + data.tracks.items[0].artists[0].name);
+      console.log("The song name: " + data.tracks.items[0].name);
+      console.log("Preview link from Spotify: " + data.tracks.items[0].artists[0].external_urls.spotify);
+      console.log("The album that the song is from: " + data.tracks.items[0].album.name);
+      console.log("===========================");
+    });
+  } else {
+    spotify.search({
+      type: 'track',
+      query: "The Sign"
+    }, function(err, data) {
+      if (err) {
+      return console.log("Error occurred: " + err);
+    }
+      // console.log(JSON.stringify(data, null, 2));
+      console.log("===========================")
+      console.log("Artist: " + data.tracks.items[0].artists[0].name);
+      console.log("The song name: " + data.tracks.items[0].name);
+      console.log("Preview link from Spotify: " + data.tracks.items[0].artists[0].external_urls.spotify);
+      console.log("The album that the song is from: " + data.tracks.items[0].album.name);
+      console.log("===========================");
+    });
+};
 };
 
 function showTweets() {
@@ -67,5 +81,5 @@ function showTweets() {
 };
 
 function showMovie() {
-  
+
 }
