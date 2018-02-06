@@ -2,13 +2,12 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var Twitter = require("twitter");
+var request = require("request");
 
 var spotify = new Spotify(keys.spotify);
-
 var client = new Twitter(keys.twitter);
 
 var argv = process.argv;
-
 var action = argv[2];
 
 var songOrMovie = "";
@@ -80,6 +79,35 @@ function showTweets() {
   });
 };
 
-function showMovie() {
 
+
+function showMovie() {
+  var queryUrl = "http://www.omdbapi.com/?t=" + songOrMovie + "&y=&plot=short&apikey=trilogy";
+  console.log(queryUrl)
+  request(queryUrl, function (error, response, body) {
+  if (!error && response.statusCode === 200) {
+    console.log("===========================")
+    console.log("Title of the movie: " + JSON.parse(body).Title)
+    console.log("Release Year: " + JSON.parse(body).Year);
+    console.log("IMDB Rating of the movie: " + JSON.parse(body).Ratings[0].Value)
+    // check if Rotten Tomatoes rating is available
+    if (JSON.parse(body).Ratings[1] === undefined) {
+      console.log("Rotten Tomatoes Rating of the movie: N/A")
+    } else {
+      console.log("Rotten Tomatoes Rating of the movie: " + JSON.parse(body).Ratings[1].Value)
+    }
+    console.log("Country where the movie was produced: " + JSON.parse(body).Country)
+    console.log("Language of the movie: " + JSON.parse(body).Language)
+    console.log("Plot of the movie: " + JSON.parse(body).Plot)
+    console.log("Actors in the movie: " + JSON.parse(body).Actors)
+    console.log("===========================")
+  } else {
+    console.log('error:', error);
+  }
+});
 }
+
+// if (argv.length <=1) {
+// console.log("****** Use the node to print out tweets, movie data, song information and stuff");
+// console.log("****** Use keywords: 'movie-this' [enter song name], 'spotify-this-song' [enter movie name], 'my-tweets', 'do-what-it-says' to get started!");
+// }
