@@ -106,8 +106,3 @@ function showMovie() {
   }
 });
 }
-
-// if (argv.length <=1) {
-// console.log("****** Use the node to print out tweets, movie data, song information and stuff");
-// console.log("****** Use keywords: 'movie-this' [enter song name], 'spotify-this-song' [enter movie name], 'my-tweets', 'do-what-it-says' to get started!");
-// }
