@@ -3,6 +3,7 @@ var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var Twitter = require("twitter");
 var request = require("request");
+var fs = require("fs");
 
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
@@ -27,17 +28,19 @@ switch (action) {
     showMovie();
     break;
   case "do-what-it-says":
-    doWhatEv();
+    doIt();
     break;
+  case undefined:
+    printInstr();
 }
 
 // function definitions
 
 function showSong() {
-  if (argv.length > 3) {
+  if (songOrMovie === "") {
     spotify.search({
       type: 'track',
-      query: songOrMovie
+      query: "The Sign"
     }, function(err, data) {
       if (err) {
         return console.log("Error occurred: " + err);
@@ -53,7 +56,7 @@ function showSong() {
   } else {
     spotify.search({
       type: 'track',
-      query: "The Sign"
+      query: songOrMovie
     }, function(err, data) {
       if (err) {
         return console.log("Error occurred: " + err);
@@ -82,10 +85,10 @@ function showTweets() {
 };
 
 function showMovie() {
-  if (argv.length > 3) {
-    var queryUrl = "http://www.omdbapi.com/?t=" + songOrMovie + "&y=&plot=short&apikey=trilogy";
+  if (songOrMovie === "") {
+    var queryUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
   } else {
-    queryUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
+    queryUrl = "http://www.omdbapi.com/?t=" + songOrMovie + "&y=&plot=short&apikey=trilogy";
   }
   // console.log(queryUrl);
   request(queryUrl, function(error, response, body) {
@@ -93,7 +96,12 @@ function showMovie() {
       console.log("===========================");
       console.log("Title of the movie: " + JSON.parse(body).Title);
       console.log("Release Year: " + JSON.parse(body).Year);
-      console.log("IMDB Rating of the movie: " + JSON.parse(body).Ratings[0].Value);
+      // check if IMDB rating is available
+      if (JSON.parse(body).Ratings[0] === undefined) {
+        console.log("IMDB Rating of the movie: N/A")
+      } else {
+        console.log("IMDB Rating of the movie: " + JSON.parse(body).Ratings[0].Value);
+      }
       // check if Rotten Tomatoes rating is available
       if (JSON.parse(body).Ratings[1] === undefined) {
         console.log("Rotten Tomatoes Rating of the movie: N/A")
@@ -111,6 +119,35 @@ function showMovie() {
   });
 }
 
-function doWhatEv() {
-
+function doIt() {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      return console.log(error);
+    }
+    var dataArr = data.split(",");
+    console.log(dataArr);
+    action = dataArr[0];
+    songOrMovie = dataArr[1];
+    switch (action) {
+      case "spotify-this-song":
+        showSong();
+        break;
+      case "movie-this":
+        showMovie();
+        break;
+    }
+  });
 }
+
+function printInstr() {
+  console.log("****** Use node to print out tweets, movie data, song information and stuff");
+  console.log("****** Use keywords: 'movie-this' [enter movie name], 'spotify-this-song' [enter song name], 'my-tweets', 'do-what-it-says' to get started!");
+}
+
+fs.appendFile("log.txt", action + songOrMovie + "\n", function(err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("Your query was added to the log!");
+  }
+});
