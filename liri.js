@@ -13,7 +13,7 @@ var action = argv[2];
 var songOrMovie = "";
 
 for (var i = 3; i < argv.length; i++) {
-    songOrMovie = songOrMovie + "+" + argv[i];
+  songOrMovie = songOrMovie + "+" + argv[i];
 }
 
 switch (action) {
@@ -40,8 +40,8 @@ function showSong() {
       query: songOrMovie
     }, function(err, data) {
       if (err) {
-      return console.log("Error occurred: " + err);
-    }
+        return console.log("Error occurred: " + err);
+      }
       // console.log(JSON.stringify(data, null, 2));
       console.log("===========================")
       console.log("Artist: " + data.tracks.items[0].artists[0].name);
@@ -56,8 +56,8 @@ function showSong() {
       query: "The Sign"
     }, function(err, data) {
       if (err) {
-      return console.log("Error occurred: " + err);
-    }
+        return console.log("Error occurred: " + err);
+      }
       // console.log(JSON.stringify(data, null, 2));
       console.log("===========================")
       console.log("Artist: " + data.tracks.items[0].artists[0].name);
@@ -66,43 +66,51 @@ function showSong() {
       console.log("The album that the song is from: " + data.tracks.items[0].album.name);
       console.log("===========================");
     });
-};
+  };
 };
 
 function showTweets() {
-  client.get('statuses/user_timeline', {count: 20}, function(error, tweets) {
-    if(error) throw error;
-    for (var i=0; i<tweets.length; i++) {
-    console.log(tweets[i].text);
-    console.log("===========================")
+  client.get('statuses/user_timeline', {
+    count: 20
+  }, function(error, tweets) {
+    if (error) throw error;
+    for (var i = 0; i < tweets.length; i++) {
+      console.log(tweets[i].text);
+      console.log("===========================");
     }
   });
 };
 
-
-
 function showMovie() {
-  var queryUrl = "http://www.omdbapi.com/?t=" + songOrMovie + "&y=&plot=short&apikey=trilogy";
-  console.log(queryUrl)
-  request(queryUrl, function (error, response, body) {
-  if (!error && response.statusCode === 200) {
-    console.log("===========================")
-    console.log("Title of the movie: " + JSON.parse(body).Title)
-    console.log("Release Year: " + JSON.parse(body).Year);
-    console.log("IMDB Rating of the movie: " + JSON.parse(body).Ratings[0].Value)
-    // check if Rotten Tomatoes rating is available
-    if (JSON.parse(body).Ratings[1] === undefined) {
-      console.log("Rotten Tomatoes Rating of the movie: N/A")
-    } else {
-      console.log("Rotten Tomatoes Rating of the movie: " + JSON.parse(body).Ratings[1].Value)
-    }
-    console.log("Country where the movie was produced: " + JSON.parse(body).Country)
-    console.log("Language of the movie: " + JSON.parse(body).Language)
-    console.log("Plot of the movie: " + JSON.parse(body).Plot)
-    console.log("Actors in the movie: " + JSON.parse(body).Actors)
-    console.log("===========================")
+  if (argv.length > 3) {
+    var queryUrl = "http://www.omdbapi.com/?t=" + songOrMovie + "&y=&plot=short&apikey=trilogy";
   } else {
-    console.log('error:', error);
+    queryUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
   }
-});
+  // console.log(queryUrl);
+  request(queryUrl, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      console.log("===========================");
+      console.log("Title of the movie: " + JSON.parse(body).Title);
+      console.log("Release Year: " + JSON.parse(body).Year);
+      console.log("IMDB Rating of the movie: " + JSON.parse(body).Ratings[0].Value);
+      // check if Rotten Tomatoes rating is available
+      if (JSON.parse(body).Ratings[1] === undefined) {
+        console.log("Rotten Tomatoes Rating of the movie: N/A")
+      } else {
+        console.log("Rotten Tomatoes Rating of the movie: " + JSON.parse(body).Ratings[1].Value);
+      }
+      console.log("Country where the movie was produced: " + JSON.parse(body).Country);
+      console.log("Language of the movie: " + JSON.parse(body).Language);
+      console.log("Plot of the movie: " + JSON.parse(body).Plot);
+      console.log("Actors in the movie: " + JSON.parse(body).Actors);
+      console.log("===========================");
+    } else {
+      console.log('error:', error);
+    }
+  });
+}
+
+function doWhatEv() {
+
 }
