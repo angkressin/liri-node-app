@@ -49,6 +49,7 @@ switch (action) {
   * my-tweets
   * do-what-it-says
 * example: 
+![Terminal Screenshot](terminal_screenshot.png?raw=true "Terminal Screenshot")
 
 
 
