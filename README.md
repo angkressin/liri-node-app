@@ -51,7 +51,8 @@ switch (action) {
 * example: 
 ![Terminal Screenshot](terminal_screenshot.png?raw=true "Terminal Screenshot")
 
-
+## Authors
+Angela Kressin
 
 
 
