@@ -1,30 +1,42 @@
-# liri node app
+# Liri Node App
 A command line app using Node.js to show:
 * Latest 20 tweets
 * A queried song from Spotify
 * A queried movie from OMDB
 * A song generated from reading a document
 
-# Code Example
+## Getting Started
+You will need:
+* Terminal (MacOS) or Console (Windows) to run the commands
+* npm packages: 
+  * FS
+  * node-spotify-api
+  * twitter
+  * request
+
+### Code Example
+This switches the task based on the action entered in process.argv[2]
+
 ```javascript
-function doIt() {
-  fs.readFile("random.txt", "utf8", function(error, data) {
-    if (error) {
-      return console.log(error);
-    }
-    var dataArr = data.split(",");
-    console.log(dataArr);
-    action = dataArr[0];
-    songOrMovie = dataArr[1];
-    switch (action) {
-      case "spotify-this-song":
-        showSong();
-        break;
-      case "movie-this":
-        showMovie();
-        break;
-    }
-  });
+switch (action) {
+  case "my-tweets":
+    showTweets();
+    logFile();
+    break;
+  case "spotify-this-song":
+    showSong();
+    logFile();
+    break;
+  case "movie-this":
+    showMovie();
+    logFile();
+    break;
+  case "do-what-it-says":
+    doIt();
+    logFile();
+    break;
+  case undefined:
+    printInstr();
 }
 ```
 
