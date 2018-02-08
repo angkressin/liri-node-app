@@ -20,19 +20,24 @@ for (var i = 3; i < argv.length; i++) {
 switch (action) {
   case "my-tweets":
     showTweets();
+    logFile();
     break;
   case "spotify-this-song":
     showSong();
+    logFile();
     break;
   case "movie-this":
     showMovie();
+    logFile();
     break;
   case "do-what-it-says":
     doIt();
+    logFile();
     break;
   case undefined:
     printInstr();
 }
+
 
 // function definitions
 
@@ -40,7 +45,7 @@ function showSong() {
   if (songOrMovie === "") {
     spotify.search({
       type: 'track',
-      query: "The Sign"
+      query: "The Sign Ace of Base"
     }, function(err, data) {
       if (err) {
         return console.log("Error occurred: " + err);
@@ -125,7 +130,7 @@ function doIt() {
       return console.log(error);
     }
     var dataArr = data.split(",");
-    console.log(dataArr);
+    // console.log(dataArr);
     action = dataArr[0];
     songOrMovie = dataArr[1];
     switch (action) {
@@ -140,14 +145,16 @@ function doIt() {
 }
 
 function printInstr() {
-  console.log("****** Use node to print out tweets, movie data, song information and stuff");
+  console.log("****** Use node to print out tweets, movie data, song information and execute an action");
   console.log("****** Use keywords: 'movie-this' [enter movie name], 'spotify-this-song' [enter song name], 'my-tweets', 'do-what-it-says' to get started!");
 }
 
-fs.appendFile("log.txt", action + songOrMovie + "\n", function(err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("Your query was added to the log!");
-  }
-});
+function logFile() {
+  fs.appendFile("log.txt", action + songOrMovie + "\n", function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Your query was added to the log!");
+    }
+  });
+}
